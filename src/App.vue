@@ -1,21 +1,33 @@
 <template>
   <div id="app">
-    <textarea v-model="text" ref="textarea" autofocus></textarea>
+    <textarea v-model="text" ref="textarea" autofocus @blur="$event.target.focus()" @keydown.ctrl.83.prevent="saveAsFile"></textarea>
+    <a ref="downloader" v-show="false"></a>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Ref } from 'vue-property-decorator';
 
 @Component
 export default class App extends Vue {
 
-  get text(): void {
+  @Ref('downloader') readonly downloader!: HTMLAnchorElement; 
+
+  get text(): string {
     return this.$store.state.text
   }
 
   set text(text) {
     this.$store.commit('setText', text);
+  }
+
+  saveAsFile(data: object) {
+
+    this.downloader.href = URL.createObjectURL(new Blob([this.text], {type: 'text/plain'}));
+    this.downloader.download = 'myText.txt';
+
+    this.downloader.click();
+
   }
 }
 </script>

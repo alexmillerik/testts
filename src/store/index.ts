@@ -13,9 +13,6 @@ export default new Vuex.Store({
     setText(state, text: string) {
       state.text = text
     },
-    setSizes(state, sizes) {
-      state.sizes = sizes
-    }
   },
   actions: {
   },
